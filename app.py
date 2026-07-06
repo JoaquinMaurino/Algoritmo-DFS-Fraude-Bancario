@@ -10,7 +10,7 @@ from src.algorithms.chain_analysis import (
 )
 from src.algorithms.cycle_detection import detectar_ciclos, detectar_ciclos_desde_cuenta
 from src.algorithms.smurfing import detectar_smurfing
-from src.algorithms.graph_renderer import render_path, render_smurfing
+from src.algorithms.graph_renderer import render_path, render_smurfing, render_full_graph
 from src.reports.pdf_report import generar_reporte_pdf
 from src.config import DEFAULT_MIN_AMOUNT, DEFAULT_MIN_TRANSACTIONS, DEFAULT_MAX_TRANSACTIONS
 
@@ -121,6 +121,12 @@ with tab1:
     with col5:
         st.subheader("Top receptores")
         st.dataframe(stats["top_receivers"], use_container_width=True)
+
+    st.divider()
+    st.subheader("Red completa de transacciones")
+    with st.spinner("Renderizando grafo completo..."):
+        html_grafo = render_full_graph(grafo)
+        components.html(html_grafo, height=620, scrolling=True)
 
 
 # TAB 2: Cadenas

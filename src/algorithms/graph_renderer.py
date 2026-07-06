@@ -67,3 +67,23 @@ def render_smurfing(patron) -> str:
         net.add_edge(cuenta, destino, label=monto_enviado, title=f"{monto_enviado} ({ratio})")
 
     return net.generate_html()
+
+
+def render_full_graph(grafo) -> str:
+    """Visualiza el grafo completo de transacciones."""
+    net = Network(height="600px", width="100%", directed=True, bgcolor="#ffffff")
+    
+    # Añadir nodos
+    for nodo in grafo.nodes():
+        in_degree = grafo.in_degree(nodo)
+        out_degree = grafo.out_degree(nodo)
+        title = f"Cuenta: {nodo}<br>Envíos: {out_degree}<br>Recepciones: {in_degree}"
+        net.add_node(str(nodo), label=str(nodo), title=title, color="#95a5a6")
+        
+    # Añadir aristas
+    for u, v, data in grafo.edges(data=True):
+        monto = data.get("amount", 0.0)
+        etiqueta = _formatear_monto(float(monto))
+        net.add_edge(str(u), str(v), title=etiqueta)
+
+    return net.generate_html()
